@@ -30,10 +30,15 @@ class Loader {
         return `${this.baseLink}${endpoint}?${params}`;
     }
 
-    private load(method: string, endpoint: string, callback: (data: unknown) => void, options: Record<string, string>): void {
+    private load(
+        method: string,
+        endpoint: string,
+        callback: (data: IApiResponse) => void,
+        options: Record<string, string>
+    ): void {
         fetch(this.makeUrl(options, endpoint), { method })
             .then(this.errorHandler)
-            .then((res) => res.json())
+            .then((res) => res.json() as Promise<IApiResponse>)
             .then((data) => callback(data))
             .catch((err) => console.error(err));
     }
