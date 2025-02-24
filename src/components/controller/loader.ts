@@ -11,15 +11,16 @@ class Loader {
 
     getResp(
         { endpoint, options = {} }: { endpoint: string; options?: Record<string, string> },
-        callback: (data: IApiResponse) => void = () => console.error('No callback for GET response')
+        callback: (data: IApiResponse) => void = () => { 
+            throw new Error("No callback provided for GET response"); 
+        }
     ): void {
         this.load('GET', endpoint, callback, options);
     }    
 
     private errorHandler(res: Response): Response {
         if (!res.ok) {
-            console.error(`Error ${res.status}: ${res.statusText}`);
-            throw new Error(res.statusText);
+            throw new Error(`Error ${res.status}: ${res.statusText}`);
         }
         return res;
     }
@@ -40,7 +41,9 @@ class Loader {
             .then(this.errorHandler)
             .then((res) => res.json() as Promise<IApiResponse>)
             .then((data) => callback(data))
-            .catch((err) => console.error(err));
+            .catch((err) => { 
+                throw new Error(`Fetch error: ${err.message}`);
+            });
     }
 }
 
