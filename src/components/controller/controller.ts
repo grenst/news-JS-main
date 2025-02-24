@@ -2,12 +2,20 @@ import AppLoader from './appLoader';
 import { IApiResponse } from '../../types/apiTypes';
 
 class AppController extends AppLoader {
-    getSources(callback: (data: IApiResponse) => void): void {
+    getSources(callback: (data: IApiResponse) => void, country: string = ''): void {
+        const options: Record<string, string> = {};
+        if (country) {
+            options['country'] = country; // Добавляем параметр country в запрос
+        }
+    
         super.getResp(
-            { endpoint: 'sources' },
+            {
+                endpoint: 'sources',
+                options,
+            },
             callback
         );
-    }
+    }    
 
     getNews(e: Event, callback: (data: IApiResponse) => void): void {
         let target = e.target as HTMLElement;

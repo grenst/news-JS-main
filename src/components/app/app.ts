@@ -13,14 +13,31 @@ class App {
 
     start(): void {
         const sourcesElement = document.querySelector('.sources');
-        if (!sourcesElement) return;
+        const countryButtons = document.querySelector('#countryButtons');
+    
+        if (!sourcesElement || !countryButtons) return;
 
         sourcesElement.addEventListener('click', (e: Event) => {
-            this.controller.getNews(e, (data: IApiResponse) => this.view.drawNews(data));
+            this.controller.getNews(e, (data) => this.view.drawNews(data));
         });
 
-        this.controller.getSources((data: IApiResponse) => this.view.drawSources(data));
-    }
+        countryButtons.addEventListener('click', (e: Event) => {
+            const target = e.target as HTMLElement;
+    
+            if (target.tagName === 'BUTTON') {
+                const selectedLanguage = target.getAttribute('data-country') || '';
+                this.controller.getSources((data) => this.view.drawSources(data), selectedLanguage);
+
+                document.querySelectorAll('#countryButtons button').forEach((btn) => {
+                    btn.classList.remove('active');
+                });
+
+                target.classList.add('active');
+            }
+        });
+
+        this.controller.getSources((data) => this.view.drawSources(data));
+    }    
 }
 
 export default App;

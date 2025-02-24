@@ -18,8 +18,15 @@ export class AppView {
 
     drawSources(data: IApiResponse): void {
         const values = data.sources ?? [];
+        const sourcesContainer = document.querySelector('.sources');
+    
+        if (!sourcesContainer) return;
+    
+        sourcesContainer.innerHTML = '';
+    
         this.sources.draw(values);
     }
+    
 }
 
 export default AppView;
