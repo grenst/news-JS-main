@@ -1,3 +1,5 @@
+import { IApiResponse } from "../../types/apiTypes";
+
 class Loader {
     private baseLink: string;
     private options: Record<string, string>;
@@ -9,10 +11,10 @@ class Loader {
 
     getResp(
         { endpoint, options = {} }: { endpoint: string; options?: Record<string, string> },
-        callback: (data: unknown) => void = () => console.error('No callback for GET response')
+        callback: (data: IApiResponse) => void = () => console.error('No callback for GET response')
     ): void {
         this.load('GET', endpoint, callback, options);
-    }
+    }    
 
     private errorHandler(res: Response): Response {
         if (!res.ok) {
